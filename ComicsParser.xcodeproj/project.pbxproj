@@ -12,6 +12,9 @@
 		6202A3781F156278002F9703 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6202A3771F156278002F9703 /* Document.swift */; };
 		6202A37A1F156278002F9703 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6202A3791F156278002F9703 /* Assets.xcassets */; };
 		6202A37D1F156278002F9703 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6202A37B1F156278002F9703 /* Main.storyboard */; };
+		6202A3861F159EC5002F9703 /* Panel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6202A3851F159EC5002F9703 /* Panel.swift */; };
+		6202A3881F15A37A002F9703 /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6202A3871F15A37A002F9703 /* Comic.swift */; };
+		6202A38A1F15A967002F9703 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6202A3891F15A967002F9703 /* PanelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +26,9 @@
 		6202A37C1F156278002F9703 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6202A37E1F156278002F9703 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6202A3841F1562E6002F9703 /* ComicsParser.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ComicsParser.entitlements; sourceTree = "<group>"; };
+		6202A3851F159EC5002F9703 /* Panel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Panel.swift; sourceTree = "<group>"; };
+		6202A3871F15A37A002F9703 /* Comic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
+		6202A3891F15A967002F9703 /* PanelView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,9 +64,12 @@
 				6202A3841F1562E6002F9703 /* ComicsParser.entitlements */,
 				6202A3731F156278002F9703 /* AppDelegate.swift */,
 				6202A3751F156278002F9703 /* ViewController.swift */,
+				6202A3891F15A967002F9703 /* PanelView.swift */,
 				6202A3771F156278002F9703 /* Document.swift */,
 				6202A3791F156278002F9703 /* Assets.xcassets */,
 				6202A37B1F156278002F9703 /* Main.storyboard */,
+				6202A3871F15A37A002F9703 /* Comic.swift */,
+				6202A3851F159EC5002F9703 /* Panel.swift */,
 				6202A37E1F156278002F9703 /* Info.plist */,
 			);
 			path = ComicsParser;
@@ -144,6 +153,9 @@
 			files = (
 				6202A3761F156278002F9703 /* ViewController.swift in Sources */,
 				6202A3741F156278002F9703 /* AppDelegate.swift in Sources */,
+				6202A3881F15A37A002F9703 /* Comic.swift in Sources */,
+				6202A38A1F15A967002F9703 /* PanelView.swift in Sources */,
+				6202A3861F159EC5002F9703 /* Panel.swift in Sources */,
 				6202A3781F156278002F9703 /* Document.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
