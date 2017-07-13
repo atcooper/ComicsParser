@@ -10,8 +10,8 @@ import Cocoa
 
 class ViewController: NSViewController {
     
-    let comic = Comic()
-    var panelsArray = [Panel]()
+    var comic = Comic()
+//    var panelsArray = [Panel]()
     
     let gutter: CGFloat = 25.0
     let dimension: CGFloat = 600.0 // This could be derived, or user modified, later, maybe?
@@ -22,6 +22,10 @@ class ViewController: NSViewController {
         let origin = CGPoint(x: 0, y: 0)
         let viewRect = NSRect(origin: origin, size: comic.size)
         scrollView.documentView = NSView(frame: viewRect)
+        
+        let centerline = NSLayoutGuide()
+        scrollView.addLayoutGuide(centerline)
+        scrollView.centerYAnchor.constraint(equalTo: centerline.centerYAnchor).isActive = true
     }
 
     override var representedObject: Any? {
@@ -61,12 +65,12 @@ class ViewController: NSViewController {
             debugPrint("Comic page size: " + newComicSize.debugDescription)
             comicView?.setFrameSize(newComicSize)
             
-            for panel in self.panelsArray {
+            for panel in self.comic.panelsArray {
                 debugPrint("Panel info: " + panel.debugDescription)
             }
             
             // Move the panels up a slot via the panel model class
-            for panel in self.panelsArray {
+            for panel in self.comic.panelsArray {
                 let y = panel.origin.y + self.dimension + self.gutter
                 panel.origin.y = y
             }
@@ -78,15 +82,28 @@ class ViewController: NSViewController {
             }
             
             let newPanel = Panel(imagePath: path)
-            let lastInsertion = NSPoint(x: self.gutter, y: self.gutter)
+            let lastInsertion = NSPoint(x: 200, y: self.gutter) // Might be this is the one place where I manually inset the panel stream
             newPanel.origin = lastInsertion
             
             let newPanelView = PanelView(panel: newPanel)
             comicView?.addSubview(newPanelView)
-            self.panelsArray.append(newPanel)
+            self.comic.panelsArray.append(newPanel)
         }
         else {
             debugPrint("Image load failed at ViewController.insertImage(path: URL)")
+        }
+    }
+    
+    // Written for opening a saved file
+    func loadComicData() {
+        let scrollView = self.view as! NSScrollView
+        let comicView = scrollView.documentView
+        comicView?.setFrameSize(self.comic.size)
+        
+        for panel in comic.panelsArray {
+            let panelView = PanelView(panel: panel)
+            panelView.setFrameOrigin(panel.origin)
+            comicView?.addSubview(panelView)
         }
     }
     

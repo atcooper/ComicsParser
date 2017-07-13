@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class Panel: NSObject {
+class Panel: NSObject, NSCoding {
     
     let imageUrl: URL
     var image: NSImage? = nil
@@ -16,6 +16,20 @@ class Panel: NSObject {
     
     var origin = NSPoint(x: 0, y: 0)
 
+    required init?(coder decoder: NSCoder) {
+        self.imageUrl = decoder.decodeObject(forKey: "CPPanelImageUrl") as! URL
+        self.image = decoder.decodeObject(forKey: "CPPanelImage") as? NSImage
+        self.size = decoder.decodeSize(forKey: "CPPanelSize")
+        self.origin = decoder.decodePoint(forKey: "CPPanelOrigin")
+    }
+    
+    func encode(with coder: NSCoder) {
+        coder.encode(imageUrl, forKey: "CPPanelImageUrl")
+        coder.encode(image, forKey: "CPPanelImage")
+        coder.encode(size, forKey: "CPPanelSize")
+        coder.encode(origin, forKey: "CPPanelOrigin")
+    }
+    
     override var description: String {
         return "\(imageUrl) \(origin)"
     }
@@ -31,4 +45,7 @@ class Panel: NSObject {
         }
         super.init()
     }
+    
+
+
 }
