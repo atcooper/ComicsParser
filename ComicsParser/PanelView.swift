@@ -22,7 +22,7 @@ class PanelView: NSImageView, NSDraggingSource, NSPasteboardItemDataProvider {
         super.init(frame: rect)
         
         self.image = panel.image
-//        self.register(forDraggedTypes: [NSPasteboardTypeString])
+        self.register(forDraggedTypes: [NSPasteboardTypeString])
     }
     
     override func draw(_ dirtyRect: NSRect) {
@@ -31,7 +31,22 @@ class PanelView: NSImageView, NSDraggingSource, NSPasteboardItemDataProvider {
         // Drawing code here.
     }
     
+    override func keyDown(with event: NSEvent) {
+        debugPrint("Key down event: " + event.debugDescription)
+        self.interpretKeyEvents([event])
+    }
+    
+    override func deleteBackward(_ sender: Any?) {
+        debugPrint("deleteBackward triggers")
+        let comicView = self.superview as! ComicView
+        comicView.viewController.deletePanel(panel: self.panel)
+    }
+    
     // Mouse stuff
+    
+    override func mouseDown(with event: NSEvent) {
+        self.window?.makeFirstResponder(self)
+    }
     
     override func mouseDragged(with event: NSEvent) {
         let pasteboardItem = NSPasteboardItem()
@@ -74,14 +89,8 @@ class PanelView: NSImageView, NSDraggingSource, NSPasteboardItemDataProvider {
         if sender.draggingSource() is NSImageView {
             return NSImage.canInit(with: sender.draggingPasteboard())
         }
-        else if sender.draggingSource() is NSTextView {
-            return true
-        }
-        else if sender.draggingSource() is NSTextField {
-            return true
-        }
         else {
-            return false
+            return true
         }
     }
     
@@ -95,34 +104,26 @@ class PanelView: NSImageView, NSDraggingSource, NSPasteboardItemDataProvider {
             let sourcePanelView = sender.draggingSource() as! PanelView
             comicsView.viewController.insertPanel(source: sourcePanelView.frame.origin, destination: comicsPoint)
         }
-//        else if sender.draggingSource() is NSTextView {
-//            let textView = sender.draggingSource() as! NSTextView
-//            let selectionRange = textView.selectedRange()
-//            
-//            let fullString = textView.textStorage?.string
-//            let startIndex = fullString?.index((fullString?.startIndex)!, offsetBy: selectionRange.location)
-//            let endIndex = fullString?.index(startIndex!, offsetBy: selectionRange.length)
-//            let selectedString = fullString?[startIndex!..<endIndex!]
-//            
-//            
-//            let textField = BubbleView(string: selectedString!)
-//            let bubble = Bubble(string: selectedString!)
-//            textField.configBubble(with: bubble)
-//            
-//            bubble.size = textField.frame.size
-//            self.panel.bubbleArray.append(bubble)
-//            
-//            
-//            self.addSubview(textField)
-//        }
-//        else if sender.draggingSource() is NSTextField {
-//            let destinationPoint = sender.draggingLocation()
-//            let panelPoint = self.convert(destinationPoint, from: nil)
-//            let draggedBubble = sender.draggingSource() as! BubbleView
-//            draggedBubble.setFrameOrigin(panelPoint)
-//            draggedBubble.bubble?.origin = panelPoint
-//            
-//        }
+        else if sender.draggingSource() is NSTextField {
+            let destinationPoint = sender.draggingLocation()
+            let panelPoint = self.convert(destinationPoint, from: nil)
+            let draggedBubble = sender.draggingSource() as! BubbleView
+            draggedBubble.setFrameOrigin(panelPoint)
+            draggedBubble.bubble?.origin = panelPoint
+            
+        }
+        else {
+            let text = sender.draggingPasteboard().pasteboardItems?[0].string(forType: NSPasteboardTypeString)
+            
+            let textField = BubbleView(string: text!)
+            let bubble = Bubble(string: text!)
+            textField.configBubble(with: bubble)
+            
+            bubble.size = textField.frame.size
+            self.panel.bubbleArray.append(bubble)
+            
+            self.addSubview(textField)
+        }
         return true;
     }
 

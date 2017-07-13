@@ -95,6 +95,14 @@ class ViewController: NSViewController {
         for panel in comic.panelsArray {
             let panelView = PanelView(panel: panel)
             panelView.setFrameOrigin(panel.origin)
+            
+            for bubble in panel.bubbleArray {
+                let bubbleView = BubbleView(string: bubble.contents)
+                bubbleView.configBubble(with: bubble)
+                bubbleView.setFrameOrigin(bubble.origin)
+                panelView.addSubview(bubbleView)
+            }
+            
             comicView?.addSubview(panelView)
         }
     }
@@ -103,7 +111,7 @@ class ViewController: NSViewController {
     func insertPanel(source: NSPoint, destination: NSPoint) {
         // For determining the comicsView scale
         let scrollView = self.view as! NSScrollView
-        let comicView = scrollView.documentView
+        let comicView = scrollView.documentView as! ComicView
         let identitySize = NSSize(width: 1.0, height: 1.0)
         let currentScaleSize = self.view.convert(identitySize, from: comicView)
         
@@ -146,11 +154,34 @@ class ViewController: NSViewController {
         // Finally, need to mark new origins for the new arrangement
         // Had trouble moving existing panels, so took the blunt approach of blanket removal, then regen page
         var point = NSPoint(x: self.lefthandInset, y: self.comic.size.height)
-        comicView?.subviews.removeAll(keepingCapacity: true)
+        comicView.subviews.removeAll(keepingCapacity: true)
         for panel in self.comic.panelsArray {
             point.y = point.y - self.gutter - self.dimension
             panel.origin = point
         }
+        self.loadComicData()
+    }
+    
+    func deletePanel(panel: Panel) {
+        for p in comic.panelsArray {
+            if (p == panel) {
+                let x = comic.panelsArray.index(of: p)
+                comic.panelsArray.remove(at: x!)
+            }
+        }
+        
+        self.comic.size.height = self.comic.size.height - self.gutter - self.dimension
+        var point = NSPoint(x: self.lefthandInset, y: self.comic.size.height)
+        
+        for panel in self.comic.panelsArray {
+            point.y = point.y - self.gutter - self.dimension
+            panel.origin = point
+        }
+        
+        let scrollView = self.view as! NSScrollView
+        let comicView = scrollView.documentView as! ComicView
+        comicView.subviews.removeAll(keepingCapacity: true)
+        
         self.loadComicData()
     }
 

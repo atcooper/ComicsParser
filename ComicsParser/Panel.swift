@@ -16,11 +16,16 @@ class Panel: NSObject, NSCoding {
     
     var origin = NSPoint(x: 0, y: 0)
 
+    var bubbleArray = [Bubble]()
+    
+    
+    
     required init?(coder decoder: NSCoder) {
         self.imageUrl = decoder.decodeObject(forKey: "CPPanelImageUrl") as! URL
         self.image = decoder.decodeObject(forKey: "CPPanelImage") as? NSImage
         self.size = decoder.decodeSize(forKey: "CPPanelSize")
         self.origin = decoder.decodePoint(forKey: "CPPanelOrigin")
+        self.bubbleArray = decoder.decodeObject(forKey: "CPPanelBubbleArray") as! [Bubble]
     }
     
     func encode(with coder: NSCoder) {
@@ -28,6 +33,7 @@ class Panel: NSObject, NSCoding {
         coder.encode(image, forKey: "CPPanelImage")
         coder.encode(size, forKey: "CPPanelSize")
         coder.encode(origin, forKey: "CPPanelOrigin")
+        coder.encode(bubbleArray , forKey: "CPPanelBubbleArray")
     }
     
     override var description: String {
