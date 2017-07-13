@@ -169,7 +169,7 @@
                                         <menuItem isSeparatorItem="YES" id="uyl-h8-XO2"/>
                                         <menuItem title="Insert Image" keyEquivalent="i" id="YKf-fT-nrN">
                                             <connections>
-                                                <action selector="insertImage:" target="Ady-hI-5gd" id="ZfV-ai-NGX"/>
+                                                <action selector="appendImage:" target="Ady-hI-5gd" id="kcz-f5-Sx2"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="BwQ-sx-IlP"/>

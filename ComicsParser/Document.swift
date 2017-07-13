@@ -53,17 +53,12 @@ class Document: NSDocument {
         
         let comic = NSKeyedUnarchiver.unarchiveObject(with: data) as! Comic
         self.comic = comic
-        debugPrint("Done with read")
     }
 
-    override func windowControllerDidLoadNib(_ windowController: NSWindowController) {
-        debugPrint("Inside windowControllerDidLoadNib")
-        let windowController = self.windowControllers[0]
-        let viewController = windowController.contentViewController as! ViewController
-        viewController.comic = self.comic
-        for panel in self.comic.panelsArray {
-            debugPrint("Panel: " + panel.description)
-        }
-    }
+//    override func windowControllerDidLoadNib(_ windowController: NSWindowController) {
+//        let windowController = self.windowControllers[0]
+//        let viewController = windowController.contentViewController as! ViewController
+//        viewController.comic = self.comic
+//    }
 }
 
