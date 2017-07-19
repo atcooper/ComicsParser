@@ -185,5 +185,83 @@ class ViewController: NSViewController {
         self.loadComicData()
     }
 
+    // This double save dialouge thing can be solved with some material I've bookmarked on Sabrina.
+    // Also needs calibration and math checking. Text bubbles are off something awful.
+    func generateWebpage(_ sender: Any) {
+        debugPrint("Generating webpage")
+        
+        let html = NSMutableString()
+        var panelIdIndex = 1
+        var bubbleIdIndex = 1
+        
+        html.append("<!DOCTYPE HTML>\n<html>\n<head>\n<title>Dummy</title>\n<link href='dummy.css' rel='stylesheet' type='text/css' />\n</head><body>\n<div id='comic'>\n")
+        for panel in comic.panelsArray {
+
+            let imagePath = panel.imageUrl
+            let bubbleArray = panel.bubbleArray
+            let panelDiv = "<div id='p" + String(panelIdIndex) + "' class='panel'>\n"
+            html.append(panelDiv)
+            
+            let img = "<img src='" + imagePath.path + "' />\n"
+            html.append(img)
+            
+            for bubble in bubbleArray {
+                let text = bubble.contents
+                let textLine = "<div id='b" + String(bubbleIdIndex) + "' class='bubble'><p>" + text + "</p></div>\n"
+                html.append(textLine)
+                bubbleIdIndex = bubbleIdIndex + 1
+            }
+            let divFinisher = "</div>\n"
+            html.append(divFinisher)
+            panelIdIndex = panelIdIndex + 1
+//            bubbleIdIndex = 1000
+        }
+        let htmlFinisher = "</div>\n</body>\n</html>\n"
+        html.append(htmlFinisher)
+        html.replaceOccurrences(of: "'", with: "\"", options: String.CompareOptions.caseInsensitive, range: NSMakeRange(0, html.length))
+        
+        let savePanel = NSSavePanel()
+        savePanel.nameFieldStringValue = "dummy.html"
+        savePanel.begin(completionHandler: {(x) -> Void in
+            if x == NSFileHandlingPanelOKButton {
+                try! html.write(to: (savePanel.url)!, atomically: true, encoding: String.Encoding.unicode.rawValue)
+            }
+        })
+        
+        panelIdIndex = 1
+        bubbleIdIndex = 1
+        
+        let css = NSMutableString()
+        
+        let start = "div#comic {\nposition: absolute;\nleft: 50%;\ntransform: translateX(-300px);}\np {\nfont-family: monospace;\nfont-size: x-large;\nfont-weight: bold;\nbackground-color: white;\npadding: 10px;}\ndiv.panel {\nposition: absolute;\nheight: 600px;\nwidth: 600px;\nborder: thick solid black;}\ndiv.bubble {\nposition: absolute;\nz-index: 2;}\n"
+        css.append(start)
+        
+        var strut_index = Int(self.gutter) // Panel placement
+       
+        for panel in comic.panelsArray {
+            let x = "div#p" + String(panelIdIndex) + " {\ntop: " + String(strut_index.description) + "px;}\n"
+            css.append(x)
+            for bubble in panel.bubbleArray {
+                let width = Int(bubble.size.width)
+                let bubbleTop = Int(self.dimension - bubble.origin.y) // Conversion for reversal of x-axis orientation.
+                let bubbleLeft = Int(bubble.origin.x)
+                let anotherString = "div#b" + String(bubbleIdIndex) + " {\n"
+                css.append(anotherString)
+                let yetAnotherString = "width: " + String(width.description) + "px;\ntop: " + String(bubbleTop.description) + "px;\nleft: " + String(bubbleLeft.description) + "px;}\n"
+                css.append(yetAnotherString)
+                bubbleIdIndex = bubbleIdIndex + 1
+            }
+            panelIdIndex = panelIdIndex + 1
+            strut_index = strut_index + Int(self.dimension) + Int(self.gutter)
+        }
+        
+        let anotherSavePanel = NSSavePanel()
+        anotherSavePanel.nameFieldStringValue = "dummy.css"
+        anotherSavePanel.begin(completionHandler: {(x) -> Void in
+            if x == NSFileHandlingPanelOKButton {
+                try! css.write(to: (anotherSavePanel.url)!, atomically: true, encoding: String.Encoding.unicode.rawValue)
+            }
+        })
+    }
 }
 
